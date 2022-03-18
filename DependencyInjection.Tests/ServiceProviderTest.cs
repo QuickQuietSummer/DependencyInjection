@@ -12,9 +12,8 @@ namespace DependencyInjection.Tests
         public void ShouldFillContainer()
         {
             SomeServiceProvider someServiceProvider = new SomeServiceProvider();
-            someServiceProvider.RefillContainer();
 
-            var allBindings = someServiceProvider.GetAllBindings();
+            var allBindings = someServiceProvider.Bind();
             var wasBind     = allBindings.Any(binding => binding.Binding2 == typeof(SomeConcreteClass));
             Assert.True(wasBind);
         }

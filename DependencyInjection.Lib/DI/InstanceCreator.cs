@@ -1,6 +1,6 @@
 ﻿namespace DependencyInjection.Lib.DI
 {
-    public class ServiceCollector
+    public class InstanceCreator
     {
         
     }

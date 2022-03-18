@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace DependencyInjection.Lib.Reflection
 {
-    public class Reflector
+    public static class Reflector
     {
-        public List<Type> GetAllSubclassesOf(Type parentType)
+        public static List<Type> GetAllSubclassesTypesOf(Type parentType)
         {
             AppDomain currentDomain = AppDomain.CurrentDomain;
             List<Type> subclasses = (from eachAssembly in currentDomain.GetAssemblies()
@@ -15,5 +15,7 @@ namespace DependencyInjection.Lib.Reflection
                 select eachType).ToList();
             return subclasses;
         }
+
+        // public static void Get 
     }
 }

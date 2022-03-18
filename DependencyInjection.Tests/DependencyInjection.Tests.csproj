@@ -43,17 +43,12 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ContainerTest.cs" />
+        <Compile Include="GraphTest.cs" />
+        <Compile Include="NodeTest.cs" />
         <Compile Include="ReflectorTest.cs" />
+        <Compile Include="ResolverTest.cs" />
         <Compile Include="ServiceProviderTest.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <Content Include="ContainerTest.cs.meta" />
-      <Content Include="ReflectorTest.cs.meta" />
-      <Content Include="ServiceProviderTest.cs.meta" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Tests" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\DependencyInjection.Lib\DependencyInjection.Lib.csproj">

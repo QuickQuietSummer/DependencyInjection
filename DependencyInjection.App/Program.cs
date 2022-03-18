@@ -1,4 +1,6 @@
 ﻿using System;
+using DependencyInjection.Lib;
+using DependencyInjection.Lib.DI;
 
 namespace DependencyInjection.App
 {
@@ -6,7 +8,10 @@ namespace DependencyInjection.App
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello");
+            Resolver resolver = new Resolver();
+            // resolver.Resolve(typeof(IIntOperation));
+            Calculator calculator =  resolver.Resolve<Calculator>();
+            // Calculator calculator = new Calculator();
         }
     }
 }
