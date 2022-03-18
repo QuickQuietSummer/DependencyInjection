@@ -4,70 +4,73 @@ using System.Linq;
 using DependencyInjection.Lib;
 using DependencyInjection.Lib.DI;
 using NUnit.Framework;
+using SimpleInjector;
 
 namespace DependencyInjection.Tests
 {
     public class ResolverTest
     {
         [Test]
-        public void ShouldReturnDependenciesTypes()
+        public void ShouldReturnValidImplementation()
         {
             Resolver resolver = new Resolver();
-
-            var dependencies = resolver.GetDependenciesTypes(typeof(SomeClass));
-            Console.WriteLine(dependencies);
-            Assert.True(dependencies.Any(type => type == typeof(SomeDependencyClassImplement)));
+            SomeClass implementation = resolver.Resolve<SomeClass>();
+            Assert.True(typeof(SomeClassInheritor) == implementation.GetType());
         }
 
         [Test]
-        public void ShouldExceptionIfPrivateCtor()
+        public void ShouldRegisterRootType()
         {
-            Resolver resolver = new Resolver();
-            Assert.Throws<ArgumentException>(() => resolver.GetDependenciesTypes(typeof(SomeClassWithPrivateCtor)));
+            Resolver resolver = new Resolver(typeof(Calculator));
+            Calculator calculator = resolver.Resolve<Calculator>();
+            Assert.True(typeof(Calculator) == calculator.GetType());
         }
 
         [Test]
-        public void ShouldReturnEmptyListIfNoCtorOrIfNoDependencies()
+        public void ShouldResolveValidDependencies()
         {
-            Resolver resolver = new Resolver();
-            Assert.IsEmpty(resolver.GetDependenciesTypes(typeof(SomeClassWithoutCtor)));
-            Assert.IsEmpty(resolver.GetDependenciesTypes(typeof(SomeClassWithEmptyDependencies)));
+            Resolver resolver = new Resolver(typeof(Calculator));
+            Calculator calculator = resolver.Resolve<Calculator>();
+            Assert.True(calculator.Calculate(5, 5) == 10);
         }
 
-        private class SomeClassWithEmptyDependencies
-        {
-            public SomeClassWithEmptyDependencies()
-            {
-            }
-        }
 
         private class SomeClass
         {
-            private readonly SomeDependencyClass _dependencyClass;
+        }
 
-            public SomeClass(SomeDependencyClass dependencyClass)
+        private class SomeClassInheritor : SomeClass
+        {
+        }
+
+        private class Calculator
+        {
+            private readonly SomeClass  _someClass;
+            private readonly IOperation _operation;
+
+            public Calculator(SomeClass someClass, IOperation operation)
             {
-                _dependencyClass = dependencyClass;
+                _someClass = someClass;
+                _operation = operation;
+            }
+
+            public int Calculate(int a, int b)
+            {
+                return _operation.Execute(a, b);
             }
         }
 
-        private class SomeClassWithoutCtor
+        private interface IOperation
         {
+            int Execute(int a, int b);
         }
 
-        private class SomeClassWithPrivateCtor
+        private class SumOperation : IOperation
         {
-            private SomeClassWithPrivateCtor()
+            public int Execute(int a, int b)
             {
+                return a + b;
             }
-        }
-
-        private class SomeDependencyClass
-        {
-        }
-
-        private class SomeDependencyClassImplement : SomeDependencyClass
-        {
         }
 
         private class SomeServiceProvider : ServiceProvider
@@ -76,7 +79,8 @@ namespace DependencyInjection.Tests
             {
                 return new[]
                 {
-                    new Binding<Type, Type>(typeof(SomeDependencyClass), typeof(SomeDependencyClassImplement))
+                    new Binding<Type, Type>(typeof(SomeClass), typeof(SomeClassInheritor)),
+                    new Binding<Type, Type>(typeof(IOperation), typeof(SumOperation))
                 };
             }
         }

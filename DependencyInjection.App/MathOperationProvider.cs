@@ -6,7 +6,7 @@ namespace DependencyInjection.App
 {
     public class MathOperationProvider : ServiceProvider
     {
-        protected override IEnumerable<Binding<Type, Type>> Bind()
+        public override IEnumerable<Binding<Type, Type>> Bind()
         {
             return new[]
             {

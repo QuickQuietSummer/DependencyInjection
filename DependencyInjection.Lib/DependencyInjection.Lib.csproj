@@ -43,10 +43,6 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="DI\Binding.cs" />
-        <Compile Include="DI\Container.cs" />
-        <Compile Include="DI\Graph.cs" />
-        <Compile Include="DI\InstanceCreator.cs" />
-        <Compile Include="DI\Node.cs" />
         <Compile Include="DI\ServiceCollector.cs" />
         <Compile Include="DI\ServiceProvider.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

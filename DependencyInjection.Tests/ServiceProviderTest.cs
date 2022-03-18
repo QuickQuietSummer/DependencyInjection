@@ -14,8 +14,9 @@ namespace DependencyInjection.Tests
             SomeServiceProvider someServiceProvider = new SomeServiceProvider();
 
             var allBindings = someServiceProvider.Bind();
-            var wasBind     = allBindings.Any(binding => binding.Binding2 == typeof(SomeConcreteClass));
-            Assert.True(wasBind);
+
+            Assert.True(allBindings.Any(binding => binding.Binding2 == typeof(SomeConcreteClass)));
+            Assert.True(allBindings.Any(binding => binding.Binding2 == typeof(SomeImplementation)));
         }
 
         private class SomeServiceProvider : ServiceProvider
@@ -24,16 +25,25 @@ namespace DependencyInjection.Tests
             {
                 return new[]
                 {
-                    new Binding<Type, Type>(typeof(SomeAbstractClass), typeof(SomeConcreteClass))
+                    new Binding<Type, Type>(typeof(SomeAbstractClass), typeof(SomeConcreteClass)),
+                    new Binding<Type, Type>(typeof(ISomeInterface), typeof(SomeImplementation))
                 };
             }
         }
 
-        private class SomeConcreteClass
+        private class SomeConcreteClass : SomeAbstractClass
         {
         }
 
         private class SomeAbstractClass
+        {
+        }
+
+        private interface ISomeInterface
+        {
+        }
+
+        private class SomeImplementation : ISomeInterface
         {
         }
     }
